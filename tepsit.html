@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Museo delle Visioni</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body 
+    
+    
+    
+    
+    
+    {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0d0d0d;
+      color: #f0f0f0;
+    }
+
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    #login-screen input {
+      padding: 0.5rem;
+      margin-top: 1rem;
+      border: none;
+      background: #1f1f1f;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    #login-screen button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #6a0dad;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    header {
+      background: linear-gradient(90deg, #370617, #6a0dad);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    header img {
+      max-width: 400px;
+      width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .item {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .item img {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .item h3 {
+      color: #f72585;
+    }
+
+    .item p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .item button {
+      margin-top: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      background: #6a0dad;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .cart {
+      background-color: #111;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+    }
+
+    .cart h2 {
+      margin-top: 0;
+      color: #bb86fc;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #444;
+    }
+
+    .total {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .checkout {
+      text-align: right;
+      margin-top: 1rem;
+    }
+
+    .checkout button {
+      background-color: #03dac6;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #checkout-message {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #222;
+      border: 1px solid #333;
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="login-screen">
+  <h2 style="color:#0ff;">Accesso Mostra</h2>
+  <input type="password" placeholder="Inserisci codice" id="password">
+  <button onclick="enterMarket()">Accedi</button>
+</div>
+
+
+<header>
+  <img src="https://i.ibb.co/Lz691x2f/roncoweed.png" alt="Logo Museo Visioni">
+  <p>Spedizione 100% sicura, no javascript.</p>
+</header>
+
+
+<div class="container">
+  <div class="grid" id="product-list">
+
+  </div>
+
+  <div class="cart" id="cart">
+    <h2>🛒 Carrello:</h2>
+    <div id="cart-items"></div>
+    <div class="total">Totale Esperienze: <span id="total">0 $</span></div>
+    <div class="checkout">
+      <button onclick="checkout()">Completa percorso</button>
+    </div>
+    <div id="checkout-message">
+      <strong>Percorso attivato.</strong><br>
+      Hai ordinato la tua merce, spedizione in 7 giorni lavorativi<br>
+      <em></em>
+    </div>
+  </div>
+</div>
+
+<script>
+  let cart = [];
+  let total = 0;
+
+  const products = [
+    {
+      name: "weed (10g)",
+      price: 100,
+      img: "https://www.coffeeshop-regine.nl/media-resize/cf2cecd4dda4fa6855f1602bc73adf8b/20181102-cn-1120.webp"
+    },
+    {
+      name: "HASHISH (5g)",
+      price: 40,
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT32XL0qALi_HbrFls6WfOXTXV0tf_dZJKHhzZk_UUwywEB5dkYjvGFJWsO3XfzFPyWj6w&usqp=CAU"
+    },
+    {
+      name: "LSD (10 frames)",
+      price: 200,
+      img: "https://ilmanifesto.it/cdn-cgi/image/format=auto,width=1400/https://static.ilmanifesto.it/2022/08/lsd.jpg"
+    },
+    {
+      name: "VIAGRA (2pz)",
+      price: 50 ,
+      img: "https://static.sky.it/editorialimages/c59226c181596bd811dc293fd7819537757be691/static/contentimages/original/sezioni/tg24/salute-e-benessere/2018/03/26/viagra_ansa.jpg"
+    },
+    {
+      name: "Speed (2pz)",
+      price: 75,
+      img: "https://media.istockphoto.com/id/459208603/it/foto/polvere-bianco.jpg?s=612x612&w=0&k=20&c=tUY4ZdxLsXyjInHxFiu_qKuOa_zM4DUriqr0Dv2kSqc="
+    },
+    {
+      name: "ANFETAMINE (1pz)",
+      price: 100,
+      img: "https://www.bellezzasalute.it/salute/farmaci/anfetamine_NG1.jpg"
+    }
+  ];
+
+  function loadProducts() {
+    const list = document.getElementById("product-list");
+    products.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>Esplorazione sensoriale simbolica.</p>
+        <p><strong>Costo: ${p.price}$</strong></p>
+        <button onclick="addToCart('${p.name}', ${p.price})">Aggiungi al carrello</button>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    total += price;
+    updateCart();
+  }
+
+  function updateCart() {
+    const cartItemsDiv = document.getElementById('cart-items');
+    cartItemsDiv.innerHTML = '';
+    cart.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `<span>${item.name}</span><span>Esp. ${item.price}$ </span>`;
+      cartItemsDiv.appendChild(div);
+    });
+    document.getElementById('total').innerText = total;
+    document.getElementById('checkout-message').style.display = 'none';
+  }
+
+  function checkout() {
+    if (cart.length === 0) return;
+    document.getElementById('checkout-message').style.display = 'block';
+  }
+
+  function enterMarket() {
+    document.getElementById('login-screen').style.display = 'none';
+    loadProducts();
+  }
+</script>
+
+</body>
+</html>
